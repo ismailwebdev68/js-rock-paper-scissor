@@ -1,61 +1,76 @@
-let human_score = 0
-let comp_score = 0
+let human_score = 0;
+let comp_score = 0;
+const rock_button = document.getElementById("rock");
+const paper_button = document.getElementById("paper");
+const scissor_button = document.getElementById("scissor");
+const score_board = document.getElementById("h2");
+const RESULT = document.getElementById("h3");
 
-function comp_choice(){
-    let rand = Math.floor(Math.random() * 10)
-    let choice
-    if(rand >=0 && rand <= 3){
-        choice = "rock"
-    }
-    else if(rand >= 4 && rand <= 7){
-        choice = "paper"
-    }
-    else{
-        choice = "scissor"
-    }
+function comp_choice() {
+  let rand = Math.floor(Math.random() * 10);
+  let choice;
+  if (rand >= 0 && rand <= 3) {
+    choice = "rock";
+  } else if (rand >= 4 && rand <= 7) {
+    choice = "paper";
+  } else {
+    choice = "scissor";
+  }
 
-    return choice
+  return choice;
 }
 
-function human_choice(){
-    let choice = prompt("Enter your choice (Rock, Paper, Scissor): ")
-    choice = choice.toLowerCase()
-    return choice
+let choice;
+rock_button.addEventListener("click", () => {
+  choice = "rock";
+  playRound(choice, comp_choice());
+});
+paper_button.addEventListener("click", () => {
+  choice = "paper";
+  playRound(choice, comp_choice());
+});
+scissor_button.addEventListener("click", () => {
+  choice = "scissor";
+  playRound(choice, comp_choice());
+});
+
+function playRound(hc, cc) {
+  if (hc === "rock" && cc === "scissor") {
+    human_score++;
+    output(1, hc, cc);
+  } else if (hc === "paper" && cc === "rock") {
+    human_score++;
+    output(1, hc, cc);
+  } else if (hc === "scissor" && cc === "paper") {
+    human_score++;
+    output(1, hc, cc);
+  } else if (hc === cc) {
+    output(2, hc, cc);
+  } else {
+    comp_score++;
+    output(0, hc, cc);
+  }
+  score_board.innerHTML = `Your Score: ${human_score} <br>Computer Score: ${comp_score}`;
 }
 
-function playRound(hc, cc){
-    if(hc === "rock" && cc === "scissor"){
-        human_score++
-        alert(`You chose :${hc} \nComputer chose: ${cc} \nYou Win!`)
+function output(result, hc, cc) {
+  if (human_score + comp_score == 5) {
+    if (human_score > comp_score) {
+      RESULT.innerText = "You win the game!";
+      human_score = 0;
+      comp_score = 0;
+    } else if (comp_score > human_score) {
+      RESULT.innerText = "Computer wins the game!";
+      human_score = 0;
+      comp_score = 0;
     }
-    else if(hc === "paper" && cc === "rock"){
-        human_score++
-        alert(`You chose :${hc} \nComputer chose: ${cc} \nYou Win!`)
+  } else {
+    if (result == 1) {
+      RESULT.innerHTML = `You chose: ${hc} <br />Computer chose: ${cc} <br /> You win!`;
+    } else if (result == 0) {
+      RESULT.innerHTML = `You chose: ${hc} <br />Computer chose: ${cc} <br /> You loose!`;
+    } else {
+      RESULT.innerHTML = `You chose: ${hc} <br />Computer chose: ${cc} <br /> It's a Tie!`;
     }
-    else if(hc === "scissor" && cc === "paper"){
-        human_score++
-        alert(`You chose :${hc} \nComputer chose: ${cc} \nYou Win!`)
-    }
-    else if(hc === cc){
-        alert(`You chose :${hc} \nComputer chose: ${cc} \nIt's a Tie!`)
-    }
-    else{
-        comp_score++
-        alert(`You chose :${hc} \nComputer chose: ${cc} \nYou Loose!`)
-    }
+  }
 }
-
-function playGame(){
-    while(human_score + comp_score < 5){
-        playRound(human_choice(), comp_choice())
-    }
-    alert(`Your Score: ${human_score} \nComputer Score: ${comp_score}`)
-    if(human_score > comp_score){
-        alert("You won the Game!")
-    }
-    else{
-        alert("Computer won the Game!")
-    }
-}
-
-playGame()
